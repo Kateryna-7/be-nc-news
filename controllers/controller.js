@@ -1,15 +1,25 @@
 const topics = require("../db/data/test-data/topics");
-const selectAllTopics = require("../models/model");
+const { selectAllTopics, selectArticleByID } = require("../models/model");
 
 const getAllTopics = (req, res, next) => {
   selectAllTopics()
     .then((topics) => {
       res.status(200).send({ topics });
-      console.log(topics, ">>>>>>>> topics");
     })
     .catch((err) => {
       next(err);
     });
 };
 
-module.exports = getAllTopics;
+const getArticleByID = (req, res, next) => {
+  const { article_id } = req.params;
+  selectArticleByID(article_id)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+module.exports = { getAllTopics, getArticleByID };

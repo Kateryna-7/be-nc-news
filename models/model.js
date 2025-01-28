@@ -7,4 +7,13 @@ const selectAllTopics = () => {
   });
 };
 
-module.exports = selectAllTopics;
+const selectArticleByID = (article_id) => {
+  console.log("srt 2");
+  return db
+    .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
+    .then((response) => {
+      return response.rows[0];
+    });
+};
+
+module.exports = { selectAllTopics, selectArticleByID };

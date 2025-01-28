@@ -27,3 +27,21 @@ describe("GET /api", () => {
       });
   });
 });
+
+describe("GET /api/topics", () => {
+  test("200: Responds with an array of topic objects, each of which should have the following properties", () => {
+    return request(app)
+      .get("/api/topics")
+      .expect(200)
+      .then((response) => {
+        const topics = response.body.topics;
+        topics.forEach((topic) => {
+          expect(typeof topic.description).toBe("string");
+          expect(typeof topic.slug).toBe("string");
+        });
+      });
+  });
+  test("return 404 if topics are not foind", () => {
+    return request(app).get("/api/to").expect(404);
+  });
+});

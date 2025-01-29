@@ -1,5 +1,9 @@
 const topics = require("../db/data/test-data/topics");
-const { selectAllTopics, selectArticleByID } = require("../models/model");
+const {
+  selectAllTopics,
+  selectArticleByID,
+  fetchAllArticlesByOrder,
+} = require("../models/model");
 
 const getAllTopics = (req, res, next) => {
   selectAllTopics()
@@ -21,5 +25,14 @@ const getArticleByID = (req, res, next) => {
       next(err);
     });
 };
+const getAllArticlesByOrder = (req, res, next) => {
+  fetchAllArticlesByOrder()
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
-module.exports = { getAllTopics, getArticleByID };
+module.exports = { getAllTopics, getArticleByID, getAllArticlesByOrder };

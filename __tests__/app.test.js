@@ -66,4 +66,50 @@ describe("GET /api/articles/:article_id", () => {
         });
       });
   });
+  test("return 404 if an article_id is not found", () => {
+    return request(app)
+      .get("/api/articles/1000")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article is not found");
+      });
+  });
+  test("return 400 if an article_id is not valid", () => {
+    return request(app)
+      .get("/api/articles/id")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+});
+
+describe("GET /api/articles", () => {
+  test("return an articles array of article objects, each of which should have all propeties except of body", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        articles.forEach((article) => {
+          expect(typeof article.article_id).toBe("number");
+          expect(typeof article.title).toBe("string");
+          expect(typeof article.author).toBe("string");
+          expect(typeof article.created_at).toBe("string");
+          expect(typeof article.votes).toBe("number");
+          expect(typeof article.article_img_url).toBe("string");
+          expect(typeof article.comment_count).toBe("string");
+        });
+      });
+  });
+  test("articles should be sorted by created at descending", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
 });

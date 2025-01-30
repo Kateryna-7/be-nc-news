@@ -32,8 +32,22 @@ const fetchAllArticlesByOrder = () => {
     });
 };
 
+const fetchAllComentsByArticleId = (article_id) => {
+  return selectArticleByID(article_id)
+    .then(() => {
+      return db.query(
+        "SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;",
+        [article_id]
+      );
+    })
+    .then((response) => {
+      return response.rows;
+    });
+};
+
 module.exports = {
   selectAllTopics,
   selectArticleByID,
   fetchAllArticlesByOrder,
+  fetchAllComentsByArticleId,
 };

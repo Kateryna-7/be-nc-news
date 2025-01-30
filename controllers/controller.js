@@ -3,6 +3,7 @@ const {
   selectAllTopics,
   selectArticleByID,
   fetchAllArticlesByOrder,
+  fetchAllComentsByArticleId,
 } = require("../models/model");
 
 const getAllTopics = (req, res, next) => {
@@ -35,4 +36,21 @@ const getAllArticlesByOrder = (req, res, next) => {
     });
 };
 
-module.exports = { getAllTopics, getArticleByID, getAllArticlesByOrder };
+const getAllCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchAllComentsByArticleId(article_id)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      console.log(err, "err");
+      next(err);
+    });
+};
+
+module.exports = {
+  getAllTopics,
+  getArticleByID,
+  getAllArticlesByOrder,
+  getAllCommentsByArticleId,
+};

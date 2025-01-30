@@ -113,3 +113,65 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("return an comments array by given article_id", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments).toEqual([
+          {
+            comment_id: 11,
+            body: "Ambidextrous marsupial",
+            votes: 0,
+            author: "icellusedkars",
+            article_id: 3,
+            created_at: expect.any(String),
+          },
+          {
+            comment_id: 10,
+            body: "git push origin master",
+            votes: 0,
+            author: "icellusedkars",
+            article_id: 3,
+            created_at: expect.any(String),
+          },
+        ]);
+      });
+  });
+  test("return 404 if an article_id is not found", () => {
+    return request(app)
+      .get("/api/articles/1000/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article is not found");
+      });
+  });
+  test("return 400 if an article_id is not valid", () => {
+    return request(app)
+      .get("/api/articles/:article_id/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+  test("comments should be sorted by created at descending", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("should return an empty array when an article exists and don't have comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments).toEqual([]);
+      });
+  });
+});

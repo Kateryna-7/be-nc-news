@@ -5,9 +5,14 @@ const {
   getArticleByID,
   getAllArticlesByOrder,
   getAllCommentsByArticleId,
+  addComment,
+  getUpdatedVotes,
+  getDeleteCommentByID,
 } = require("./controllers/controller");
 
 const app = express();
+
+app.use(express.json());
 
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints });
@@ -21,6 +26,12 @@ app.get("/api/articles/:article_id/comments", getAllCommentsByArticleId);
 
 app.get("/api/articles", getAllArticlesByOrder);
 
+app.post("/api/articles/:article_id/comments", addComment);
+
+app.patch("/api/articles/:article_id", getUpdatedVotes);
+
+app.delete("/api/comments/:comment_id", getDeleteCommentByID);
+
 app.use((err, req, res, next) => {
   if (err.status) {
     res.status(err.status).send({ msg: err.msg });
@@ -30,7 +41,13 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "Bad request" });
-  } else res.status(500).send({ msg: "Internal Server Error" });
+  } else {
+    next(err);
+  }
+});
+
+app.use((err, req, res, next) => {
+  res.status(500).send({ msg: "Internal Server Error" });
 });
 
 module.exports = app;

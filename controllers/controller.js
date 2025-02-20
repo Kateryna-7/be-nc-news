@@ -8,6 +8,7 @@ const {
   insertComment,
   updateVotes,
   deleteCommentByID,
+  selectAllUsers,
 } = require("../models/model");
 
 const getAllTopics = (req, res, next) => {
@@ -90,6 +91,16 @@ const getDeleteCommentByID = (req, res, next) => {
     });
 };
 
+const getAllUsers = (req, res, next) => {
+  selectAllUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 module.exports = {
   getAllTopics,
   getArticleByID,
@@ -98,4 +109,5 @@ module.exports = {
   addComment,
   getUpdatedVotes,
   getDeleteCommentByID,
+  getAllUsers,
 };

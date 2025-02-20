@@ -42,7 +42,7 @@ describe("GET /api/topics", () => {
         });
       });
   });
-  test("return 404 if topics are not foind", () => {
+  test("return 404 if topics are not found", () => {
     return request(app).get("/api/to").expect(404);
   });
 });
@@ -300,5 +300,24 @@ describe("DELETE /api/comments/:comment_id", () => {
       .then((response) => {
         expect(response.body.msg).toBe("Bad request");
       });
+  });
+});
+
+describe("GET /api/users", () => {
+  test("200: Responds with an array of users objects, each of which should have the following properties: username, name avatar_url", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((resp) => {
+        const users = resp.body.users;
+        users.forEach((user) => {
+          expect(typeof user.username).toBe("string");
+          expect(typeof user.name).toBe("string");
+          expect(typeof user.avatar_url).toBe("string");
+        });
+      });
+  });
+  test("return 404 if user is not found", () => {
+    return request(app).get("/api/us").expect(404);
   });
 });

@@ -1,5 +1,6 @@
 const endpointsJson = require("../endpoints.json");
 const request = require("supertest");
+
 const app = require("../app.js");
 const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed.js");
@@ -319,5 +320,31 @@ describe("GET /api/users", () => {
   });
   test("return 404 if user is not found", () => {
     return request(app).get("/api/us").expect(404);
+  });
+});
+
+describe.only("GET /api/articles (sorting queries)", () => {
+  test("return articles sorted by any valid column (defaults to the created_at date) and order, which can be set to asc or desc for ascending or descending (defaults to descending)", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((resp) => {
+        expect(resp.body.articles).toBeSorted("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("return articles sorted by given statement and orderby given order", () => {
+    const sortBy = "topic";
+    const order = "ASC";
+    return (
+      request(app)
+        .get("/api/articles?sort_by=topic&order=asc")
+        //.send({ sortBy, order })
+        .expect(200)
+        .then((resp) => {
+          expect(resp.body.articles).toBeSorted("topic", { ascending: true });
+        })
+    );
   });
 });

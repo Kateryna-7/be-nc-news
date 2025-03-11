@@ -9,6 +9,8 @@ const {
   updateVotes,
   deleteCommentByID,
   selectAllUsers,
+
+  selectArticlesSortBy,
 } = require("../models/model");
 
 const getAllTopics = (req, res, next) => {
@@ -68,7 +70,6 @@ const addComment = (req, res, next) => {
 };
 
 const getUpdatedVotes = (req, res, next) => {
-  console.log(req.body, ">>>> body");
   const { article_id } = req.params;
   const newVote = req.body.inc_votes;
   updateVotes(article_id, newVote)
@@ -101,6 +102,16 @@ const getAllUsers = (req, res, next) => {
     });
 };
 
+const getArticlesSortBy = (req, res, next) => {
+  selectArticlesSortBy()
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 module.exports = {
   getAllTopics,
   getArticleByID,
@@ -110,4 +121,5 @@ module.exports = {
   getUpdatedVotes,
   getDeleteCommentByID,
   getAllUsers,
+  getArticlesSortBy,
 };

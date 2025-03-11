@@ -323,7 +323,7 @@ describe("GET /api/users", () => {
   });
 });
 
-describe.only("GET /api/articles (sorting queries)", () => {
+describe("GET /api/articles (sorting queries)", () => {
   test("return articles sorted by any valid column (defaults to the created_at date) and order, which can be set to asc or desc for ascending or descending (defaults to descending)", () => {
     return request(app)
       .get("/api/articles")

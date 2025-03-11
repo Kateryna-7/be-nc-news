@@ -9,6 +9,7 @@ const {
   getUpdatedVotes,
   getDeleteCommentByID,
   getAllUsers,
+  getArticlesSortBy,
 } = require("./controllers/controller");
 
 const cors = require("cors");
@@ -37,6 +38,8 @@ app.patch("/api/articles/:article_id", getUpdatedVotes);
 app.delete("/api/comments/:comment_id", getDeleteCommentByID);
 
 app.get("/api/users", getAllUsers);
+
+app.get("/api/articles", getArticlesSortBy);
 
 app.use((err, req, res, next) => {
   if (err.status) {

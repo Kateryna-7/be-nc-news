@@ -88,6 +88,15 @@ const selectAllUsers = () => {
   });
 };
 
+const selectArticlesSortBy = (sortBy = "created_at", order = "DESC") => {
+  console.log(sortBy, order, ">>>");
+  return db
+    .query(`SELECT * FROM users ORDER BY ${sortBy} ${order};`)
+    .then((response) => {
+      return response.rows;
+    });
+};
+
 module.exports = {
   selectAllTopics,
   selectArticleByID,
@@ -97,4 +106,5 @@ module.exports = {
   updateVotes,
   deleteCommentByID,
   selectAllUsers,
+  selectArticlesSortBy,
 };
